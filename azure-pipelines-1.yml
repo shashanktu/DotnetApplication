@@ -1,0 +1,57 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- gkwan-ibm-patch-1
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+ - stage: Build
+   displayName: Build Stage
+   jobs:
+    - job: Build
+      displayName: Build job 
+      pool:
+       vmImage: ubuntu-latest
+      steps:
+        - task: PowerShell@2
+          displayName: task1
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your PowerShell commands here.
+              
+              Write-Host "Hello World this is build stage"
+        - task: PowerShell@2
+          displayName: task2
+          inputs:
+            targetType: 'inline'
+            script: |
+              # Write your PowerShell commands here.
+              
+              Write-Host "Hello World task2"
+ - stage: Deploy
+   displayName: uat release
+   dependsOn: Build
+   jobs:
+     - deployment: Deploy
+       displayName: Deployon uat environment
+       environment: uat
+       pool:
+        vmImage: ubuntu-latest
+       strategy: 
+        runOnce:
+         deploy:
+          steps:
+          - task: PowerShell@2
+            inputs:
+              targetType: 'inline'
+              script: |
+                # Write your PowerShell commands here.
+                
+                Write-Host "Hello World-pushing into uat evnironment"
+           

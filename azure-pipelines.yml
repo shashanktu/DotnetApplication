@@ -1,0 +1,56 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- prod
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Maven@4
+      inputs:
+        mavenPomFile: '$(System.Defaultworkingdirectory)/start/pom.xml'
+        goals: 'clean package'
+        publishJUnitResults: false
+        javaHomeOption: 'JDKVersion'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: false
+        sonarQubeRunAnalysis: false
+    - task: Docker@2
+      displayName: Build system
+      inputs:
+        containerRegistry: 'Docker_ACR'
+        repository: 'jammanaraj/myfirstcontainerimage'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/start/system/Dockerfile'
+        tags: 'system'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Docker_ACR'
+        repository: 'jammanaraj/myfirstcontainerimage'
+        command: 'build'
+        Dockerfile: '$(Build.SourcesDirectory)/start/inventory/Dockerfile'
+        tags: inventory1
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Docker_ACR'
+        repository: 'jammanaraj/myfirstcontainerimage'
+        command: 'push'
+        Dockerfile: '$(Build.SourcesDirectory)/start/inventory/Dockerfile'
+        tags: inventory1
+
