@@ -18,8 +18,7 @@ spec:
         image: dcsassetsacr.azurecr.io/system:1.0-SNAPSHOT
         ports:
         - containerPort: 9080
-      imagePullSecrets:
-      - name: guidesecret
+     
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -41,8 +40,7 @@ spec:
         image: dcsassetsacr.azurecr.io/inventory:1.0-SNAPSHOT
         ports:
         - containerPort: 9081
-      imagePullSecrets:
-      - name: guidesecret
+
 ---
 apiVersion: v1
 kind: Service
