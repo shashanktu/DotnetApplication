@@ -40,7 +40,7 @@ spec:
       - name: inventory-container
         image: dcsassetsacr.azurecr.io/inventory:1.0-SNAPSHOT
         ports:
-        - containerPort: 9081
+        - containerPort: 9082
       imagePullSecrets:
       - name: dcsacr
 ---
@@ -67,5 +67,5 @@ spec:
     app: inventory
   ports:
   - protocol: TCP
-    port: 9081
-    targetPort: 9081
+    port: 9082
+    targetPort: 9082
