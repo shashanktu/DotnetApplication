@@ -10,10 +10,16 @@ terraform {
   provider "azurerm" {
   features {}
 }
+
+variable "ssh_public_key" {
+  default = "~/.ssh/id_rsa.pub"
+}
+
 resource "azurerm_resource_group" "dev" {
   name     = "DCS_assets_terraform"
   location = "East US"
 }
+
 
 resource "azurerm_kubernetes_cluster" "k8s" {
   location            = "eastus"
@@ -33,7 +39,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     admin_username = "admin"
 
     ssh_key {
-      key_data = file("~/.ssh/id_rsa.pub")
+      key_data = file(var.ssh_public_key)
     }
   }
   network_profile {
