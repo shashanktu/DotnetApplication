@@ -11,6 +11,6 @@ terraform {
   features {}
 }
 resource "azurerm_resource_group" "dev" {
-  name     = "DCS_assets_webapp"
+  name     = "DCS_assets"
   location = "East US"
 }
