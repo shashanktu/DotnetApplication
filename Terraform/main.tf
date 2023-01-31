@@ -14,10 +14,11 @@ resource "azurerm_resource_group" "dev" {
   name     = "DCS_assets_terraform"
   location = "East US"
 }
+
 resource "azurerm_kubernetes_cluster" "k8s" {
   location            = "eastus"
   name                = "k8scluster"
-  resource_group_name = dev.name
+  resource_group_name = "DCS_assets_terraform"
   dns_prefix          = "k8scluster98794"
   tags                = {
     Environment = "Development"
