@@ -14,7 +14,7 @@ provider "azurerm" {
 resource "azurerm_kubernetes_cluster" "k8s" {
   location            = "eastus"
   name                = "k8scluster"
-  resource_group_name = "anitham"
+  resource_group_name = "DCS_assets"
   dns_prefix          = "k8scluster98794"
   tags                = {
     Environment = "Development"
