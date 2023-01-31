@@ -16,6 +16,7 @@ spec:
       containers:
       - name: system-container
         image: dcsassetsacr.azurecr.io/system:1.0-snapshot
+        imagePullPolicy: "Always"
         ports:
         - containerPort: 9080
       imagePullSecrets:
@@ -39,6 +40,7 @@ spec:
       containers:
       - name: inventory-container
         image: dcsassetsacr.azurecr.io/inventory:1.0-snapshot
+        imagePullPolicy: "Always"
         ports:
         - containerPort: 9081
       imagePullSecrets:
