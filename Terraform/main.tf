@@ -124,6 +124,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 	  "sudo apt-get -y install tomcat8-docs tomcat8-examples tomcat8-admin",
 	  "sudo apt -y update",
 	  "sudo apt -y install apache2", 
+    "cat /etc/tomcat8/tomcat-users.xml"
 	  #"systemctl start tomcat8",
 	  #"systemctl stop tomcat8",
 	  #"systemctl restart tomcat8",	  
