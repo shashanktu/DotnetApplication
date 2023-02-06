@@ -97,6 +97,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   size                = "Standard_B2s"
   admin_username      = "adminuser"
   admin_password      = "P@$$w0rd1234!"
+  disable_password_authentication = false
+
 
   network_interface_ids = [
     azurerm_network_interface.vmnic.id,
