@@ -1,4 +1,4 @@
-#terraform deployment dot net script
+#terraform deployment dot net script main file
 terraform {
   required_version = ">= 0.11" 
  backend "azurerm" {
