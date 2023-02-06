@@ -129,6 +129,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 	  #"systemctl restart tomcat8",	  
     ]
 	connection {
+  type = ssh
 	host = azurerm_public_ip.public_ip.ip_address
 	user = "adminuser"	
 	password = "P@$$w0rd1234!"
