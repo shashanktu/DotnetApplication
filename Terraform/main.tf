@@ -6,12 +6,10 @@ terraform {
     key                  = "terraform.tfstate"
 	access_key  ="__storagekey__"
 	}
-
 	}
-  
   provider "azurerm" {
   features {}
-  }
+}
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "vnet10"
