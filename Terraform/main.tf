@@ -1,15 +1,21 @@
+#Create Storage Account
 terraform {
-  required_version = ">= 0.11" 
- backend "azurerm" {
-  storage_account_name = "__terraformstorageaccount__"
-    container_name       = "tfvm"
-    key                  = "terraform.tfstate"
-	access_key  ="__storagekey__"
-	}
+  required_version = ">= 0.11" 
+backend "azurerm" {
+  storage_account_name = "__terraformstorageaccount__"
+    container_name       = "tfvm"
+    key                  = "terraform.tfstate"
+    access_key  ="__storagekey__"
+    }     
+}
+  
+provider "azurerm" {
+  features {}
 }
 
-  provider "azurerm" {
-  features {}
+resource "azurerm_resource_group" "DCS_assets_storage" {
+  name     = "DCS_assets_storage"
+  location = "East US"
 }
 
 resource "azurerm_virtual_network" "vnet" {
@@ -97,9 +103,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   size                = "Standard_B2s"
   admin_username      = "adminuser"
   admin_password      = "P@$$w0rd1234!"
-  disable_password_authentication = false
-
-
+disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.vmnic.id,
   ]
@@ -118,19 +122,33 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
   provisioner "remote-exec" {
-    inline = [
+  inline = [
 	  "sudo apt-get -y update && apt-get upgrade",
-	  "sudo apt-get -y install tomcat8",
-	  "sudo apt-get -y install tomcat8-docs tomcat8-examples tomcat8-admin",
+	  "sudo apt install default-jdk -y",
+	  "sudo useradd -r -m -U -d /opt/tomcat -s /bin/false tomcat",
+	  "sudo apt-get -y install tomcat9",
+	  "sudo apt-get -y install tomcat9-docs tomcat9-examples tomcat9-admin",
 	  "sudo apt -y update",
-	  "sudo apt -y install apache2", 
-    "cat /etc/tomcat8/tomcat-users.xml"
+	  "sudo apt -y install apache2",
+	  "sudo chmod o+wx /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\"?>\" > /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<tomcat-users>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<role rolename=\\\"admin-gui\\\"/>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<role rolename=\\\"admin-script\\\"/>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<role rolename=\\\"manager-gui\\\"/>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<role rolename=\\\"manager-status\\\"/>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<role rolename=\\\"manager-script\\\"/>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<role rolename=\\\"manager-jmx\\\"/>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"<user name=\\\"admin\\\" password=\\\"admin\\\" roles=\\\"admin-gui,admin-script,manager-gui,manager-status,manager-script,manager-jmx\\\"/>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",
+	  "sudo echo \"</tomcat-users>\" >> /var/lib/tomcat9/conf/tomcat-users.xml",    
+	  "sudo systemctl stop tomcat9",
+	  "sudo systemctl start tomcat9",	   
 	  #"systemctl start tomcat8",
 	  #"systemctl stop tomcat8",
 	  #"systemctl restart tomcat8",	  
-    ]
+    ]    
 	connection {
-  type = "ssh"
+	type = "ssh"
 	host = azurerm_public_ip.public_ip.ip_address
 	user = "adminuser"	
 	password = "P@$$w0rd1234!"
