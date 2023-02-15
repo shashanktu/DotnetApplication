@@ -1,16 +1,16 @@
 #Create Storage Account
 terraform {
-  required_version = ">= 0.11" 
+required_version = ">= 0.11" 
 backend "azurerm" {
-  storage_account_name = "__terraformstorageaccount__"
-    container_name       = "tfvm"
-    key                  = "terraform.tfstate"
-    access_key  ="__storagekey__"
-    }     
+  storage_account_name = "__terraformstorageaccount__"
+  container_name= "tfvm"
+  key= "terraform.tfstate"
+  access_key="__storagekey__"
+} 
+
 }
-  
 provider "azurerm" {
-  features {}
+   features {}
 }
 
 resource "azurerm_resource_group" "DCS_assets_storage" {
