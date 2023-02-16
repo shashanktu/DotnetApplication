@@ -13,10 +13,6 @@ provider "azurerm" {
    features {}
 }
 
-resource "azurerm_resource_group" "DCS_assets_storage" {
-  name     = "DCS_assets_storage"
-  location = "East US"
-}
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "vnet10"
